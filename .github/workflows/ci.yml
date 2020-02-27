@@ -10,7 +10,7 @@ name: CI
 
 jobs:
 
-  install:
+  dockerfile:
     runs-on: ubuntu-latest
     strategy:
       matrix:

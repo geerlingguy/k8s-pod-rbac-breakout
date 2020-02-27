@@ -1,5 +1,7 @@
 # Kubernetes Pod RBAC Breakout
 
+![CI](https://github.com/geerlingguy/k8s-pod-rbac-breakout/workflows/CI/badge.svg?branch=master&event=push)
+
 Kubernetes' Role-Based Access Control system for controlling resource permissions can be somewhat daunting to new or inexperienced users, and as such, I've seen a lot of wild and crazy clusters, granting extremely generous permissions, sometimes cluster-wide.
 
 By default, Kubernetes is fairly secure; every namespace gets a `default` service account, which has no assigned permissions (at least as of Kubernetes 1.14), so it behaves essentially like an `unauthenticated` user.
@@ -55,9 +57,7 @@ metadata:
   name: fabric8-rbac
 subjects:
   - kind: ServiceAccount
-    # Reference to upper's `metadata.name`
     name: default
-    # Reference to upper's `metadata.namespace`
     namespace: default
 roleRef:
   kind: ClusterRole
@@ -67,7 +67,7 @@ roleRef:
 
 If you don't know anything about Kubernetes, you might think this is okay, because it's just giving `cluster-admin` to some `fabric8-rbac` user, right?
 
-Wrong: this CRB, if applied, grants `cluster-admin` privileges to _every single resource_ in the default namespace!
+**Wrong**: this CRB, if applied, grants `cluster-admin` privileges to _every single resource_ in the default namespace!
 
 So if you run the `kubectl apply` command, then refresh the PHP script page, you'll see all the commands returning info. Note that the commands being run are benign in _this_ case—but if an attacker were able to execute code on one of your containers, the attacker could just as easily run:
 
