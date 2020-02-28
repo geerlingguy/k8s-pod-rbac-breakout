@@ -14,7 +14,6 @@
  */
 
 $commands_to_test = [
-  'kubectl get pods -n rbac-breakout',
   'kubectl cluster-info',
   'kubectl get pods --all-namespaces',
 ];
