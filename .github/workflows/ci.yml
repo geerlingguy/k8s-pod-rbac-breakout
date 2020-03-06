@@ -12,18 +12,10 @@ jobs:
 
   dockerfile:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php_version: ['7.4']
 
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-
-      - name: Set up PHP ${{ matrix.php_version }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php_version }}
 
       - name: Build container
         run: docker build -t rbac-breakout:latest .
@@ -32,4 +24,4 @@ jobs:
         run: docker run -d -p 80:80 rbac-breakout:latest
 
       - name: Make sure the page loads.
-        run: curl localhost
+        run: curl --max-time 10 --retry 5 --retry-delay 0 --retry-max-time 40 localhost
